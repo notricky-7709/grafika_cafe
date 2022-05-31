@@ -1,0 +1,124 @@
+{% load l10n %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-lg bg-dark">
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+      			<ul class="navbar-nav ml-auto">
+        			<li class="nav-item">
+          				<a class="nav-link disabled" aria-current="page" href="#">User</a>
+        			</li>
+        			<li class="nav-item">
+          				<a class="nav-link" aria-current="page" href="#">Log</a>
+        			</li>
+        			<li class="end-0">
+        				<a class="nav-link" aria-current="page" href="#">Log-out</a>
+        			</li>
+        		</ul>
+        	</div>
+		</div>
+	</nav>
+	<div class="container" >
+		<div class="row position-relative start-50">
+			<div class="col">
+				<div class="">
+					<h1>User</h1>
+				</div>
+			</div>
+		</div>
+		<button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+		<div class="row position-relative mx-auto w-75">
+			<table class="table">
+				<tr>
+					<th> FoodId </th>
+					<th> Name</th>
+					<th> Price </th>
+					<th> Action</th>
+				</tr>
+				{% for menu in menu %}
+				<tr>
+					<td> {{ menu.id }} </td>
+					<td> {{ menu.name }} </td>
+					<td> {{ menu.harga }} </td>
+					<td>
+						<div class="d-grid d-md-block">
+  							<button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#editModal{{menu.id}}">Edit</button>
+  							<a href= "{% url 'management:delete' menu.id %}"><button class="btn btn-primary" type="button" >Delete</button></a>
+						</div>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+	<!-- Create Modal -->
+	<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+		  <div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title" id="creatleModalLabel">Create Menu</h5>
+				  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+			  <form Action = "{% url 'management:register' %}" method="POST">
+				<div class="modal-body">
+				  
+					  {% csrf_token %}
+					  <div class="mb-3">
+							<label for="usernameInput" class="form-label">Nama</label>
+							<input type="text" class="form-control" id="usernameInput" name = "name" placeholder="Nama...">
+					  </div>
+					  <div class="mb-3">
+							<label for="passwordInput" class="form-label">Harga</label>
+							<input type="text" class="form-control" id="passwordInput" name = "price" placeholder="Harga...">
+					  </div>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				  <input type="Submit" class="btn btn-primary" value = "Submit">
+				</div>
+			  </form>
+		  </div>
+		</div>
+  </div>
+  <!-- Edit Modal --><!-- di for loop -->
+  {% for menu in menu %}
+  <div class="modal fade" id="editModal{{menu.id}}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+		  <div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title" id="editModalLabel">Edit User</h5>
+				  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+			  <form Action = "{% url 'management:update' menu.id %}" method="POST">
+				<div class="modal-body">
+				  
+					  {% csrf_token %}
+					  <div class="mb-3">
+							<label for="usernameInput" class="form-label">Nama</label>
+							<input type="text" class="form-control" id="usernameInput" name = "name" value="{{menu.name}}">
+					  </div>
+					  <div class="mb-3">
+							<label for="passwordInput" class="form-label">Harga</label>
+							<input type="text" class="form-control" id="passwordInput" name = "price" value="{{menu.harga}}">
+					  </div>
+				  
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				  <input type="Submit" class="btn btn-primary" value = "Submit">
+				</div>
+		  </form>
+		  </div>
+		</div>
+  </div>
+  {% endfor %}
+
+</body>
+
+</html>
